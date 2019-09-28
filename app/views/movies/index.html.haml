@@ -4,10 +4,10 @@
 %table#movies.table.table-striped.col-md-12
   %thead
     %tr
-      %th Movie Title
-      %th Rating
-      %th Release Date
-      %th More Info
+      %th{:class => sorted("title")}= sortable "title"
+      %th{:class => 'bg-warning'} Rating
+      %th{:class => sorted("release_date")}= sortable "release_date"
+      %th{:class => 'bg-warning'} More Info
   %tbody
     - @movies.each do |movie|
       %tr
