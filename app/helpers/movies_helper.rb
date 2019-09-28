@@ -11,8 +11,7 @@ module MoviesHelper
   end  
   
   def sorted(column)
-    puts "came to sorted"
-    if(params[:sort] == column)
+    if(sort_attribute == column)
       return "hilite"
     else
       return "bg-warning"

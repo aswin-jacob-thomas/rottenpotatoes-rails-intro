@@ -1,4 +1,7 @@
 class MoviesController < ApplicationController
+  
+  helper_method :sort_attribute
+  helper_method :direction_attribute
 
   def movie_params
     params.require(:movie).permit(:title, :rating, :description, :release_date)
@@ -9,16 +12,37 @@ class MoviesController < ApplicationController
     @movie = Movie.find(id) # look up movie by unique ID
     # will render app/views/movies/show.<extension> by default
   end
-
+  
+  def sort_attribute
+    params[:sort] || session['sort']
+  end
+  
+  def direction_attribute
+    params[:direction] || session['direction']
+  end  
   
   def index
     @all_ratings = Movie.all_ratings  
-    @sort = params[:sort]
-    @direction = params[:direction] if @sort
-    @parameters = @sort + ' ' + @direction if @sort
-    @ratings = params[:ratings] || @all_ratings
-    @movies = Movie.where({rating:@ratings.keys}).order(@parameters)
- 
+    
+    @sort = sort_attribute 
+    puts "sorting attribute",session['sort']
+    @direction = direction_attribute
+    
+    @sort_parameters = @sort + ' ' + @direction if @sort && @direction
+    
+    @ratings = params[:ratings] ||session['ratings']|| @all_ratings
+    
+    if(params[:ratings]!=session['ratings'] or params[:sort]!=session['sort'] or params[:ratings]!=session['ratings'])
+      flash.keep
+      puts "redirect happening"
+      redirect_to movies_path sort: @sort, ratings: @ratings, direction: @direction
+    end  
+    
+    @movies = Movie.where({rating:@ratings.keys}).order(@sort_parameters)
+    
+    session['sort'] = @sort
+    session['direction'] = @direction
+    session['ratings'] = @ratings
   end
   
   def new
