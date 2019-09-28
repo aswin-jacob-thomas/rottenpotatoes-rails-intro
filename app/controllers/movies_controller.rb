@@ -12,13 +12,13 @@ class MoviesController < ApplicationController
 
   
   def index
-    puts "reaching here"
-    puts params[:sort]
-    if(params[:sort])
-      @movies = Movie.all.order(params[:sort]+' '+params[:direction])
-    else
-      @movies = Movie.all
-    end  
+    @all_ratings = Movie.all_ratings  
+    @sort = params[:sort]
+    @direction = params[:direction] if @sort
+    @parameters = @sort + ' ' + @direction if @sort
+    @ratings = params[:ratings] || @all_ratings
+    @movies = Movie.where({rating:@ratings.keys}).order(@parameters)
+ 
   end
   
   def new
