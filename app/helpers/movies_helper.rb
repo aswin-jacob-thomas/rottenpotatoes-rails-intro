@@ -6,7 +6,7 @@ module MoviesHelper
   
   def sortable(column)
     title = column.titleize
-    direction = column == params[:sort] && params[:direction] == "asc" ? "desc" : "asc"
+    direction = column == sort_attribute && direction_attribute == "asc" ? "desc" : "asc"
     link_to title, movies_path(:sort=>column, :direction=>direction), :class=>"links", :id=>column+"_header"
   end  
   
