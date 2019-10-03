@@ -10,6 +10,7 @@ class MoviesController < ApplicationController
   def show
     id = params[:id] # retrieve movie ID from URI route
     @movie = Movie.find(id) # look up movie by unique ID
+      
     # will render app/views/movies/show.<extension> by default
   end
   
@@ -25,7 +26,7 @@ class MoviesController < ApplicationController
     @all_ratings = Movie.all_ratings  
     
     @sort = sort_attribute 
-    puts "sorting attribute",session['sort']
+    
     @direction = direction_attribute
     
     @sort_parameters = @sort + ' ' + @direction if @sort && @direction
@@ -34,7 +35,6 @@ class MoviesController < ApplicationController
     
     if(params[:ratings]!=session['ratings'] or params[:sort]!=session['sort'] or params[:ratings]!=session['ratings'])
       flash.keep
-      puts "redirect happening"
       redirect_to movies_path sort: @sort, ratings: @ratings, direction: @direction
     end  
     
